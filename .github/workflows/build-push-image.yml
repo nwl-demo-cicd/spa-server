@@ -1,36 +1,45 @@
-name: CI/CD
-on:
-  push:
-    branches:
-      - main
+# name: CI/CD
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+# jobs:
+#   build-push-image:
+#     name: build-push-image
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
+#       packages: write
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Login to GitHub Container Registry
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ghcr.io
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5.0.0
-        with:
-          images: ghcr.io/${{ github.repository }}
+#       - name: Extract metadata (tags, labels) for Docker
+#         id: meta
+#         uses: docker/metadata-action@v5.0.0
+#         with:
+#           images: ghcr.io/${{ github.repository }}
 
-      - name: Build and push the Docker image
-        uses: docker/build-push-action@v5.0.0
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+#       - name: Build and push the Docker image
+#         uses: docker/build-push-action@v5.0.0
+#         with:
+#           push: true
+#           tags: ${{ steps.meta.outputs.tags }}
+#           labels: ${{ steps.meta.outputs.labels }}
+
+#   deploy-to-runner:
+#     name: deploy-to-runner
+#     runs-on: self-hosted
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Build App
+#         run: docker-compose up --force-recreate --build --detach
+#     needs: [build-push-image]

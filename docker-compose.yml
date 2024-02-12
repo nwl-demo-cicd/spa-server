@@ -4,6 +4,7 @@ services:
     build:
       context: ./
       target: production
+    # image: node:14
     volumes:
       - .:/src
     command: npm run start:prod
